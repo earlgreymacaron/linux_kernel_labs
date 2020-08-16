@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./filesystems/minfs/kernel/minfs.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./filesystems/minfs/kernel/minfs.ko /home/macaron/linux/tools/labs/skels/./filesystems/minfs/kernel/minfs.o /home/macaron/linux/tools/labs/skels/./filesystems/minfs/kernel/minfs.mod.o ;  true

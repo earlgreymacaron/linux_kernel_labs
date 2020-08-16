@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./device_drivers/kernel/so2_cdev.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./device_drivers/kernel/so2_cdev.ko /home/macaron/linux/tools/labs/skels/./device_drivers/kernel/so2_cdev.o /home/macaron/linux/tools/labs/skels/./device_drivers/kernel/so2_cdev.mod.o ;  true

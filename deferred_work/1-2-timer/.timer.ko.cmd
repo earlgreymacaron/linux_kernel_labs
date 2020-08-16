@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./deferred_work/1-2-timer/timer.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./deferred_work/1-2-timer/timer.ko /home/macaron/linux/tools/labs/skels/./deferred_work/1-2-timer/timer.o /home/macaron/linux/tools/labs/skels/./deferred_work/1-2-timer/timer.mod.o ;  true

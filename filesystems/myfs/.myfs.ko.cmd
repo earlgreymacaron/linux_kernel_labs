@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./filesystems/myfs/myfs.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./filesystems/myfs/myfs.ko /home/macaron/linux/tools/labs/skels/./filesystems/myfs/myfs.o /home/macaron/linux/tools/labs/skels/./filesystems/myfs/myfs.mod.o ;  true

@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./kernel_modules/8-kdb/hello_kdb.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./kernel_modules/8-kdb/hello_kdb.ko /home/macaron/linux/tools/labs/skels/./kernel_modules/8-kdb/hello_kdb.o /home/macaron/linux/tools/labs/skels/./kernel_modules/8-kdb/hello_kdb.mod.o ;  true

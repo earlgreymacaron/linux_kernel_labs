@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./kernel_api/3-memory/memory.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./kernel_api/3-memory/memory.ko /home/macaron/linux/tools/labs/skels/./kernel_api/3-memory/memory.o /home/macaron/linux/tools/labs/skels/./kernel_api/3-memory/memory.mod.o ;  true

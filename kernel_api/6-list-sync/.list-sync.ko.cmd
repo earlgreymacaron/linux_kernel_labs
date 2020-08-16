@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./kernel_api/6-list-sync/list-sync.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./kernel_api/6-list-sync/list-sync.ko /home/macaron/linux/tools/labs/skels/./kernel_api/6-list-sync/list-sync.o /home/macaron/linux/tools/labs/skels/./kernel_api/6-list-sync/list-sync.mod.o ;  true

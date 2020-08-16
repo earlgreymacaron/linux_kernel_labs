@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./interrupts/kbd.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./interrupts/kbd.ko /home/macaron/linux/tools/labs/skels/./interrupts/kbd.o /home/macaron/linux/tools/labs/skels/./interrupts/kbd.mod.o ;  true

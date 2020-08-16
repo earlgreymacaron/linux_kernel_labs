@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./kernel_api/7-list-test/list-test.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./kernel_api/7-list-test/list-test.ko /home/macaron/linux/tools/labs/skels/./kernel_api/7-list-test/list-test.o /home/macaron/linux/tools/labs/skels/./kernel_api/7-list-test/list-test.mod.o ;  true
