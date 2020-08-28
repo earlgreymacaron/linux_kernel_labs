@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./device_model/bex_misc.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./device_model/bex_misc.ko /home/macaron/linux/tools/labs/skels/./device_model/bex_misc.o /home/macaron/linux/tools/labs/skels/./device_model/bex_misc.mod.o ;  true

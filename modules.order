@@ -14,6 +14,8 @@ kernel//home/macaron/linux/tools/labs/skels/./kernel_api/7-list-test/list-test.k
 kernel//home/macaron/linux/tools/labs/skels/./kernel_api/3-memory/memory.ko
 kernel//home/macaron/linux/tools/labs/skels/./kernel_api/6-list-sync/list-sync.ko
 kernel//home/macaron/linux/tools/labs/skels/./kernel_api/2-sched-spin/sched-spin.ko
+kernel//home/macaron/linux/tools/labs/skels/./device_model/bex.ko
+kernel//home/macaron/linux/tools/labs/skels/./device_model/bex_misc.ko
 kernel//home/macaron/linux/tools/labs/skels/./kernel_modules/7-list-proc/list_proc.ko
 kernel//home/macaron/linux/tools/labs/skels/./kernel_modules/5-oops-mod/oops_mod.ko
 kernel//home/macaron/linux/tools/labs/skels/./kernel_modules/6-cmd-mod/cmd_mod.ko
@@ -22,4 +24,9 @@ kernel//home/macaron/linux/tools/labs/skels/./kernel_modules/10-mem-info/mem_inf
 kernel//home/macaron/linux/tools/labs/skels/./kernel_modules/3-error-mod/err_mod.ko
 kernel//home/macaron/linux/tools/labs/skels/./kernel_modules/1-2-test-mod/hello_mod.ko
 kernel//home/macaron/linux/tools/labs/skels/./kernel_modules/8-kdb/hello_kdb.ko
+kernel//home/macaron/linux/tools/labs/skels/./memory_mapping/vmmap/vmmap.ko
+kernel//home/macaron/linux/tools/labs/skels/./memory_mapping/kmmap/kmmap.ko
 kernel//home/macaron/linux/tools/labs/skels/./interrupts/kbd.ko
+kernel//home/macaron/linux/tools/labs/skels/./networking/5-udp-sock/udp_sock.ko
+kernel//home/macaron/linux/tools/labs/skels/./networking/3-4-tcp-sock/tcp_sock.ko
+kernel//home/macaron/linux/tools/labs/skels/./networking/1-2-netfilter/kernel/filter.ko

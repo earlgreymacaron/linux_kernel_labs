@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./networking/3-4-tcp-sock/tcp_sock.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./networking/3-4-tcp-sock/tcp_sock.ko /home/macaron/linux/tools/labs/skels/./networking/3-4-tcp-sock/tcp_sock.o /home/macaron/linux/tools/labs/skels/./networking/3-4-tcp-sock/tcp_sock.mod.o ;  true

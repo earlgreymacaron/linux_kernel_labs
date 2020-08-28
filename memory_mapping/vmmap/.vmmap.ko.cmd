@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./memory_mapping/vmmap/vmmap.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./memory_mapping/vmmap/vmmap.ko /home/macaron/linux/tools/labs/skels/./memory_mapping/vmmap/vmmap.o /home/macaron/linux/tools/labs/skels/./memory_mapping/vmmap/vmmap.mod.o ;  true

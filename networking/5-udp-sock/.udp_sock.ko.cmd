@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./networking/5-udp-sock/udp_sock.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./networking/5-udp-sock/udp_sock.ko /home/macaron/linux/tools/labs/skels/./networking/5-udp-sock/udp_sock.o /home/macaron/linux/tools/labs/skels/./networking/5-udp-sock/udp_sock.mod.o ;  true

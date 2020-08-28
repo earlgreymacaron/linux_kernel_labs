@@ -1,0 +1,1 @@
+cmd_/home/macaron/linux/tools/labs/skels/./memory_mapping/kmmap/kmmap.ko := ld -r -m elf_i386 -T ./scripts/module-common.lds  --build-id  -o /home/macaron/linux/tools/labs/skels/./memory_mapping/kmmap/kmmap.ko /home/macaron/linux/tools/labs/skels/./memory_mapping/kmmap/kmmap.o /home/macaron/linux/tools/labs/skels/./memory_mapping/kmmap/kmmap.mod.o ;  true

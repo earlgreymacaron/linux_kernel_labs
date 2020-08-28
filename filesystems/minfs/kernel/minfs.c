@@ -50,7 +50,7 @@ static const struct file_operations minfs_dir_operations = {
 
 static const struct inode_operations minfs_dir_inode_operations = {
 	.lookup		= minfs_lookup,
-	/* TODO 7: Use minfs_create as the create function. */
+	.create = minfs_create, 
 };
 
 static const struct address_space_operations minfs_aops = {
@@ -107,23 +107,25 @@ static struct inode *minfs_iget(struct super_block *s, unsigned long ino)
 	inode->i_ctime = current_time(inode);
 	inode->i_mtime = current_time(inode);
 	
-	/* TODO 7: Fill address space operations (inode->i_mapping->a_ops) */
+	/* Fill address space operations (inode->i_mapping->a_ops) */
+	inode->i_mapping->a_ops = &minfs_aops;
+	
+	/* Fill inode and file operations for regular files*/
+	if (S_ISREG(inode->i_mode)) {
+		inode->i_op = &minfs_file_inode_operations;
+		inode->i_fop = &minfs_file_operations;
+	}
 
 	if (S_ISDIR(inode->i_mode)) {
 		/* Fill dir inode operations. */
-		inode->i_op = &simple_dir_inode_operations;
-		inode->i_fop = &simple_dir_operations;
-		
-		/* TODO 5: Use minfs_dir_inode_operations for i_op
-		 * and minfs_dir_operations for i_fop. */
+		//inode->i_op = &simple_dir_inode_operations;
+		//inode->i_fop = &simple_dir_operations;
+		inode->i_op = &minfs_dir_inode_operations;
+		inode->i_fop = &minfs_dir_operations;
 
 		/* Directory inodes start off with i_nlink == 2. */
 		inc_nlink(inode);
 	}
-
-	/* TODO 7: Fill inode and file operations for regular files
-	 * (i_op and i_fop). Use the S_ISREG macro.
-	 */
 
 	/* Fill data for mii */
 	mii = container_of(inode, struct minfs_inode_info, vfs_inode);
@@ -150,23 +152,30 @@ static int minfs_readdir(struct file *filp, struct dir_context *ctx)
 	int over;
 	int err = 0;
 
-	/* TODO 5: Get inode of directory and container inode. */
+	/* Get inode of directory and container inode. */
+	inode = file_inode(filp);
+	mii = container_of(inode, struct minfs_inode_info, vfs_inode);
 
-	/* TODO 5: Get superblock from inode (i_sb). */
+	/* Get superblock from inode (i_sb). */
+	sb = inode->i_sb;
 
-	/* TODO 5: Read data block for directory inode. */
+	/* Read data block for directory inode. */
+	bh = sb_bread(sb, mii->data_block);
+	if (bh == NULL) {
+		err = -ENOMEM;
+		printk(LOG_LEVEL "could not read block\n");
+		goto out_bad_sb;
+	}
 
 	for (; ctx->pos < MINFS_NUM_ENTRIES; ctx->pos++) {
-		/* TODO 5: Data block contains an array of
-		 * "struct minfs_dir_entry". Use `de' for storing.
-		 */
+		/* Data block contains an array of "struct minfs_dir_entry". */
+		de = ((struct minfs_dir_entry *) bh->b_data) + ctx->pos;
 
-		/* TODO 5: Step over empty entries (de->ino == 0). */
+		/* Step over empty entries (de->ino == 0). */
+		if (de->ino == 0) 
+			continue;
 
-		/*
-		 * Use `over` to store return value of dir_emit and exit
-		 * if required.
-		 */
+		/* Use `over` to store return value of dir_emit and exit if required. */
 		over = dir_emit(ctx, de->name, MINFS_NAME_LEN, de->ino,
 				DT_UNKNOWN);
 		if (over) {
@@ -202,15 +211,26 @@ static struct minfs_dir_entry *minfs_find_entry(struct dentry *dentry,
 	struct minfs_dir_entry *de;
 	int i;
 
-	/* TODO 6: Read parent folder data block (contains dentries).
-	 * Fill bhp with return value.
-	 */
+	/* Read parent folder data block (contains dentries). */
+	bh = sb_bread(sb, mii->data_block);
+	if (bh == NULL) {
+		printk(LOG_LEVEL "could not read block\n");
+		return NULL;
+	}
+	*bhp = bh; 
 
+	/* Traverse all entries, find entry by name */
 	for (i = 0; i < MINFS_NUM_ENTRIES; i++) {
-		/* TODO 6: Traverse all entries, find entry by name
-		 * Use `de' to traverse. Use `final_de' to store dentry
-		 * found, if existing.
-		 */
+		de = ((struct minfs_dir_entry *) bh->b_data) + i;
+
+		/* Step over empty entries (de->ino == 0). */
+		if (de->ino == 0) 
+			continue;
+
+		if (!strcmp(de->name, name)) { 
+			final_de = de;
+			break;
+		}
 	}
 
 	/* bh needs to be released by caller. */
@@ -220,8 +240,7 @@ static struct minfs_dir_entry *minfs_find_entry(struct dentry *dentry,
 static struct dentry *minfs_lookup(struct inode *dir,
 		struct dentry *dentry, unsigned int flags)
 {
-	/* TODO 6: Comment line. */
-	return simple_lookup(dir, dentry, flags);
+	//return simple_lookup(dir, dentry, flags);
 
 	struct super_block *sb = dir->i_sb;
 	struct minfs_dir_entry *de;
@@ -238,7 +257,6 @@ static struct dentry *minfs_lookup(struct inode *dir,
 		if (IS_ERR(inode))
 			return ERR_CAST(inode);
 	}
-
 	d_add(dentry, inode);
 	brelse(bh);
 
@@ -279,19 +297,29 @@ static struct inode *minfs_new_inode(struct inode *dir)
 	struct inode *inode;
 	int idx;
 
-	/* TODO 7: Find first available inode. */
+	/* Find first available inode. */
+	idx = find_first_zero_bit(&sbi->imap, MINFS_NUM_INODES);
+	if (idx < 0) {
+		printk(LOG_LEVEL "could not find an empty block\n");
+		return NULL;
+	}
 
-	/* TODO 7: Mark the inode as used in the bitmap and mark
-	 * the superblock buffer head as dirty.
-	 */
+	/* Mark the inode as used in the bitmap and mark the superblock buffer head as dirty. */
+	__test_and_set_bit(idx, &sbi->imap);
+	mark_buffer_dirty(sbi->sbh);
 
-	/* TODO 7: Call new_inode(), fill inode fields
-	 * and insert inode into inode hash table.
-	 */
+	/* Call new_inode(), fill inode fields and insert inode into inode hash table. */
+	inode = new_inode(sb);
+	inode_init_owner(inode, dir, 0);
+	inode->i_ino = idx; 
+	inode->i_mtime = current_time(inode);
+	inode->i_atime = current_time(inode);
+	inode->i_ctime = current_time(inode);
+	inode->i_blocks = 0; 
+	insert_inode_hash(inode);
 
 	/* Actual writing to the disk will be done in minfs_write_inode,
-	 * which will be called at a later time.
-	 */
+	 * which will be called at a later time. */
 
 	return inode;
 }
@@ -310,14 +338,36 @@ static int minfs_add_link(struct dentry *dentry, struct inode *inode)
 	int i;
 	int err = 0;
 
-	/* TODO 7: Get: directory inode (in inode); containing inode (in mii); superblock (in sb). */
+	/* Get: directory inode (in inode); containing inode (in mii); superblock (in sb). */
+	dir = dentry->d_parent->d_inode;
+	mii = container_of(dir, struct minfs_inode_info, vfs_inode); 
+	sb = dir->i_sb;
 
-	/* TODO 7: Read dir data block (use sb_bread). */
+	/* Read dir data block */
+	bh = sb_bread(sb, mii->data_block); 
+	if (bh == NULL) {
+		printk(LOG_LEVEL "could not read block\n");
+		err = -ENOMEM;
+		goto out;
+	}
 
-	/* TODO 7: Find first free dentry (de->ino == 0). */
+	/* Find first free dentry (de->ino == 0). */
+	for (i = 0; i < MINFS_NUM_ENTRIES; i++) {
+		de = ((struct minfs_dir_entry *) bh->b_data) + i;
+		if (de->ino == 0) 
+			break;
+	}
+	
+	/* If all entries are occupied, return -ENOSPC */
+	if (i == MINFS_NUM_ENTRIES) {
+		err = -ENOSPC;
+		goto out;
+	}
 
-	/* TODO 7: Place new entry in the available slot. Mark buffer_head
-	 * as dirty. */
+	/* Place new entry in the available slot. Mark buffer_head as dirty. */
+	de->ino = inode->i_ino;
+	memcpy((void *) de->name, dentry->d_name.name, MINFS_NAME_LEN);	
+	mark_buffer_dirty(bh);
 
 out:
 	brelse(bh);
@@ -329,8 +379,7 @@ out:
  * Create a VFS file inode. Use minfs_file_... operations.
  */
 
-static int minfs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
-		bool excl)
+static int minfs_create(struct inode *dir, struct dentry *dentry, umode_t mode, bool excl)
 {
 	struct inode *inode;
 	struct minfs_inode_info *mii;
@@ -355,7 +404,6 @@ static int minfs_create(struct inode *dir, struct dentry *dentry, umode_t mode,
 
 	d_instantiate(dentry, inode);
 	mark_inode_dirty(inode);
-
 	printk(KERN_DEBUG "new file inode created (ino = %lu)\n",
 		inode->i_ino);
 
@@ -427,7 +475,7 @@ static const struct super_operations minfs_ops = {
 	.put_super	= minfs_put_super,
 	.alloc_inode = minfs_alloc_inode,
 	.destroy_inode = minfs_destroy_inode, 
-	/* TODO 7:	= set write_inode function. */
+	.write_inode = minfs_write_inode, 
 };
 
 static int minfs_fill_super(struct super_block *s, void *data, int silent)

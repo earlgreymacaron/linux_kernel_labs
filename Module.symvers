@@ -1,4 +1,6 @@
 0x00000000	task_info_add_for_current	/home/macaron/linux/tools/labs/skels/./kernel_api/6-list-sync/list-sync	EXPORT_SYMBOL
+0x00000000	bex_unregister_driver	/home/macaron/linux/tools/labs/skels/./device_model/bex	EXPORT_SYMBOL
 0x00000000	write_address	/home/macaron/linux/tools/labs/skels/./kernel_modules/8-kdb/hello_kdb	EXPORT_SYMBOL
 0x00000000	task_info_remove_expired	/home/macaron/linux/tools/labs/skels/./kernel_api/6-list-sync/list-sync	EXPORT_SYMBOL
 0x00000000	task_info_print_list	/home/macaron/linux/tools/labs/skels/./kernel_api/6-list-sync/list-sync	EXPORT_SYMBOL
+0x00000000	bex_register_driver	/home/macaron/linux/tools/labs/skels/./device_model/bex	EXPORT_SYMBOL
